@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+      <h1 class="h1" >Makeup Api<i class="bi bi-chat-heart-fill"></i></h1>
+      <input type="text" class="product_name" placeholder="Enter Your Prodcut Name">
+    </div>
+    <div class="result"></div>
+    
+    
+    <script >
+      let input=document.querySelector(".product_name");
+let submit=document.createElement("button");
+document.body.appendChild(submit);
+
+
+
+submit.innerHTML="Submit";
+submit.style.backgroundColor="pink";
+
+let result=document.querySelector(".result");
+
+result.innerHTML="";
+
+ submit.addEventListener("click",async()=>{
+    try {
+        let response= await fetch("http://makeup-api.herokuapp.com/api/v1/products.json?brand="+input.value+"",
+        {
+               method:"GET",
+               body:JSON.stringify(),
+               header:{
+                   "Content-type":"application/json"
+               }
+    })
+    let data=await response.json();
+    console.log(data.brand);
+    if(data[0].brand==null){
+        alert("Invalid Brand name");
+    }else{
+         result.innerHTML=`
+    <div class="content">
+     <h6>ID: ${data[0].id}</h6>
+     <h6>Brand: ${data[0].brand}</h6>
+     <h6>  Product-link:${data[0].product_link}"<h6/>
+     <h6>Category: ${data[0].category}</h6>
+     <img  src=" ${data[0].image_link}"/>
+     <h6>Price: ${data[0].price}$</h6>
+     <h6>Description:${data[0].description}</h6>
+     </div>`
+    }
+    
+    
+    } catch (error) {
+        alert("Brand is not available");
+        
+    }
+ })
+ 
+    </script>
+</body>
+</html>
